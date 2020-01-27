@@ -1,4 +1,5 @@
 'use strict';
+
 var CLOUD_WIDTH = 420;
 var CLOUD_HEIGHT = 270;
 var CLOUD_X = 100;
@@ -25,12 +26,20 @@ var printText = function (ctx, style, font, x, y, text) {
 
 var getMaxElement = function (array) {
   var maxElement = array[0];
-  for (var i = 0; i < array.length; i++) {
+  for (var i = 1; i < array.length; i++) {
     if (array[i] > maxElement) {
       maxElement = array[i];
     }
   }
   return maxElement;
+};
+
+var setRandomWholeNumber = function () {
+  return Math.round(Math.random() * 100);
+};
+
+var setRandomColor = function (ctx, color) {
+  ctx.fillStyle = 'hsl(' + color + ', ' + setRandomWholeNumber() + '%, ' + setRandomWholeNumber() + '%)';
 };
 
 window.renderStatistics = function (ctx, players, times) {
@@ -41,18 +50,23 @@ window.renderStatistics = function (ctx, players, times) {
 
   var maxTime = getMaxElement(times);
 
-  for (var i = 0; i < players.length; i++) {
-    if (players[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      var saturation = Math.round(Math.random() * 100);
-      ctx.fillStyle = 'hsl(235,' + saturation + '%, 39%)';
-    }
+  var setColor = function (names) {
+    ctx.fillStyle = names[i] === 'Вы' ? 'rgba(255, 0, 0, 1)' : setRandomColor(ctx, 235);
+  };
 
+  var drawStatisticsCloud = function () {
     var COLUMN_HEIGHT = Math.round(COLUMN_MAX_HEIGHT * times[i]) / maxTime;
+    var COLUMN_X = CLOUD_X + MARGIN + (COLUMN_WIDTH + COLUMN_GAP) * i;
+    var COLUMN_Y = CLOUD_Y + HEADING + GAP;
+    var DIFF_HEIGHTS = COLUMN_MAX_HEIGHT - COLUMN_HEIGHT;
 
-    ctx.fillRect(CLOUD_X + MARGIN + (COLUMN_WIDTH + COLUMN_GAP) * i, CLOUD_Y + HEADING + TEXT_HEIGHT + GAP + (COLUMN_MAX_HEIGHT - COLUMN_HEIGHT), COLUMN_WIDTH, COLUMN_HEIGHT);
-    printText(ctx, '#000', fontText, CLOUD_X + MARGIN + (COLUMN_WIDTH + COLUMN_GAP) * i, CLOUD_Y + HEADING + GAP + TEXT_HEIGHT + COLUMN_MAX_HEIGHT + TEXT_HEIGHT, players[i]);
-    printText(ctx, '#000', fontText, CLOUD_X + MARGIN + (COLUMN_WIDTH + COLUMN_GAP) * i, CLOUD_Y + GAP + HEADING + (COLUMN_MAX_HEIGHT - COLUMN_HEIGHT), Math.round(times[i]));
+    setColor(players);
+    ctx.fillRect(COLUMN_X, COLUMN_Y + TEXT_HEIGHT + DIFF_HEIGHTS, COLUMN_WIDTH, COLUMN_HEIGHT);
+    printText(ctx, '#000', fontText, COLUMN_X, COLUMN_Y + 2 * TEXT_HEIGHT + COLUMN_MAX_HEIGHT, players[i]);
+    printText(ctx, '#000', fontText, COLUMN_X, COLUMN_Y + DIFF_HEIGHTS, Math.round(times[i]));
+  };
+
+  for (var i = 0; i < players.length; i++) {
+    drawStatisticsCloud();
   }
 };
