@@ -2,7 +2,7 @@
 
 var CLOUD_WIDTH = 420;
 var CLOUD_HEIGHT = 270;
-var CLOUD_X = 100;
+var CLOUD_X = 130;
 var CLOUD_Y = 10;
 var MARGIN = 20;
 var GAP = 15;
