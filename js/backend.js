@@ -31,7 +31,7 @@
     xhr.open('POST', URL);
     xhr.send(data);
   };
-  var load = function (qLoad, qError) {
+  var load = function (onLoad, onError) {
     var URL = 'https://js.dump.academy/code-and-magick/data';
 
     var xhr = new XMLHttpRequest();
@@ -39,18 +39,18 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_OK) {
-        qLoad(xhr.response);
+        onLoad(xhr.response);
       } else {
-        qError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      qError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
-      qError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT_IN_MS;
