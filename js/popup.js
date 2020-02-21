@@ -1,15 +1,19 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
+
+  var Keys = {
+    ESC: 'Escape',
+    ENTER: 'Enter'
+  };
   var setup = document.querySelector('.setup');
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = setup.querySelector('.setup-close');
   var userNameInput = document.querySelector('.setup-user-name');
+  var form = setup.querySelector('.setup-wizard-form');
 
   var onPopupEscPress = function (evt) {
-    if (evt.key === ESC_KEY && userNameInput !== evt.target) {
+    if (evt.key === Keys.ESC && userNameInput !== evt.target) {
       closePopup();
     }
   };
@@ -26,22 +30,36 @@
     setup.style.left = '';
   };
 
-  setupOpen.addEventListener('click', function () {
-    openPopup();
-  });
+  var createElement = function (tag, parentClass) {
+    var elementNew = document.createElement(tag);
+    var parent = document.querySelector(parentClass);
+    parent.append(elementNew);
+    return elementNew;
+  };
+
+  var spanError = createElement('span', '.setup');
+
+  var onLoad = function () {
+    closePopup();
+  };
+
+  var onError = function (errorMassage) {
+    spanError.textContent = errorMassage;
+    spanError.setAttribute('style', 'color: black');
+  };
+
+  setupOpen.addEventListener('click', openPopup);
 
   setupOpen.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (evt.key === Keys.ENTER) {
       openPopup();
     }
   });
 
-  setupClose.addEventListener('click', function () {
-    closePopup();
-  });
+  setupClose.addEventListener('click', closePopup);
 
   setupClose.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (evt.key === Keys.ENTER) {
       closePopup();
     }
   });
@@ -57,4 +75,13 @@
       userNameInput.setCustomValidity('');
     }
   });
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(form), onLoad, onError);
+  });
+
+  window.popup = {
+    onError: onError
+  };
 })();
