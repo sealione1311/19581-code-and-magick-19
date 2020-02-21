@@ -59,7 +59,6 @@
     xhr.send();
   };
 
-
   window.backend = {
     save: save,
     load: load

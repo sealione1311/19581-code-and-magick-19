@@ -11,33 +11,7 @@
   var wizardCoat = setupPlayer.querySelector('.wizard-coat');
   var wizardEyes = setupPlayer.querySelector('.wizard-eyes');
   var fireball = document.querySelector('.setup-fireball-wrap');
-  // var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  // var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  /* var generateWizard = function () {
-    return {
-      name: getRandomElement(NAMES) + ' ' + getRandomElement(SURNAMES),
-      coatColor: getRandomElement(COAT_COLORS),
-      eyesColor: getRandomElement(EYES_COLORS)
-    };
-  };
 
-  var generateWizards = function (count) {
-    var wizards = [];
-    for (var i = 0; i < count; i++) {
-      wizards.push(generateWizard());
-    }
-    return wizards;
-  };*/
-
-  /* var renderWizards = function (wizardsarray) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < wizardsarray.length; i++) {
-      fragment.appendChild(renderWizard(wizardsarray[i]));
-    }
-    return fragment;
-  };
-
-  similarListElement.appendChild(renderWizards(generateWizards(WIZARDS_NUMBER)));*/
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -50,21 +24,6 @@
     return array[Math.floor(Math.random() * array.length)];
   };
 
-
-  var createElement = function (tag, parentClass) {
-    var elementNew = document.createElement(tag);
-    var parent = document.querySelector(parentClass);
-    parent.append(elementNew);
-    return elementNew;
-  };
-
-  var spanError = createElement('span', '.setup');
-
-  var onError = function (errorMassage) {
-    spanError.textContent = errorMassage;
-    spanError.setAttribute('style', 'color: black');
-  };
-
   var onLoad = function (wizards) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < WIZARDS_NUMBER; i++) {
@@ -73,7 +32,7 @@
     similarListElement.appendChild(fragment);
   };
 
-  window.backend.load(onLoad, onError);
+  window.backend.load(onLoad, window.popup.onError);
   document.querySelector('.setup-similar').classList.remove('hidden');
 
   wizardCoat.addEventListener('click', function () {
